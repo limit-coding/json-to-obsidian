@@ -8,6 +8,7 @@
 |------|------|----------|
 | `json_to_obsidian.py` | JSON 转 Markdown | JSON |
 | `gemini_html_to_md.py` | Gemini HTML 转 Markdown | Google Takeout HTML |
+| `obsidian_indexer.py` | 生成 Obsidian 知识库索引 | Markdown 文件夹 |
 
 ---
 
@@ -96,8 +97,54 @@ Gemini_Conversations/
 
 ---
 
+## obsidian_indexer.py
+
+为 Obsidian 知识库生成双向链接索引，支持时间线、主题标签、同日期关联等功能。
+
+### 功能
+
+- 扫描所有对话 Markdown 文件
+- 生成 MOC (Map of Content) 总览索引
+- 按月份生成月度索引
+- 按主题/关键词生成标签索引
+- 自动生成反向链接（相关对话推荐）
+- 支持 Obsidian `[[双链]]` 语法
+
+### 使用方法
+
+```bash
+python3 obsidian_indexer.py
+```
+
+默认配置：
+- 源目录：`~/Desktop/Takeout/Gemini_Conversations`
+- 输出：`源目录/99_Index/`
+
+### 输出结构
+
+```
+99_Index/
+├── MOC.md              # 知识库总览
+├── Tags.md             # 主题标签索引
+├── Today.md            # 今日对话
+├── YYYY-MM.md          # 月度索引（如 2026-03.md）
+└── Backlinks/          # 反向链接
+    └── *.md            # 每个对话的相关对话
+```
+
+### 主题分类
+
+自动识别以下主题：
+- 学习、编程、AI、科研、实习、UAV/无人机、课程、竞赛
+
+### 环境要求
+
+- Python 3.6+
+- 无需额外依赖
+
+---
+
 ## 环境要求
 
 - Python 3.6+
-- 无需额外依赖（`json_to_obsidian.py` 无外部依赖）
-- `gemini_html_to_md.py` 使用 Python 内置 `re` 模块，无需安装
+- 无需额外依赖（所有工具使用 Python 内置模块）
