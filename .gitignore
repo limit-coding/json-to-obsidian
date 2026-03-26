@@ -1,0 +1,8 @@
+# JSON source files
+*.json
+
+# Obsidian output directories
+*_obsidian/
+
+# System files
+.DS_Store
