@@ -1,16 +1,29 @@
-# JSON to Obsidian
+# Obsidian Data Converters
 
-一个将JSON格式的AI聊天记录转换为Obsidian本地知识库Markdown格式的工具。
+将各种 AI 聊天记录转换为 Obsidian 本地知识库 Markdown 格式的工具集。
 
-## 功能
+## 工具列表
 
-- 将JSON文件转换为Obsidian兼容的Markdown格式
-- 自动生成YAML frontmatter元数据
+| 工具 | 功能 | 输入格式 |
+|------|------|----------|
+| `json_to_obsidian.py` | JSON 转 Markdown | JSON |
+| `gemini_html_to_md.py` | Gemini HTML 转 Markdown | Google Takeout HTML |
+
+---
+
+## json_to_obsidian.py
+
+将 JSON 格式的 AI 聊天记录转换为 Obsidian 兼容的 Markdown 格式。
+
+### 功能
+
+- 将 JSON 文件转换为 Obsidian 兼容的 Markdown 格式
+- 自动生成 YAML frontmatter 元数据
 - 保留层级结构（## 章节、### 子项）
 - 支持数组类型数据，每个对象生成独立文件
-- 自动处理文件名（使用标题或UUID）
+- 自动处理文件名（使用标题或 UUID）
 
-## 使用方法
+### 使用方法
 
 ```bash
 python3 json_to_obsidian.py <json文件> [输出目录]
@@ -26,15 +39,65 @@ python3 json_to_obsidian.py conversations.json
 python3 json_to_obsidian.py conversations.json ./my_obsidian_notes
 ```
 
-## 输出格式
+---
 
-转换后的Markdown文件包含：
+## gemini_html_to_md.py
 
-- **YAML Frontmatter**：创建时间、来源、关键字段
-- **标题**：自动使用 `name` 字段或UUID
-- **层级内容**：复杂对象拆分为章节结构
+将 Google Takeout 导出的 Gemini Apps 活动记录 HTML 转换为 Obsidian Markdown 格式。
+
+### 功能
+
+- 解析 Google Takeout HTML 格式的 Gemini 活动记录
+- 自动提取 Prompt、回复内容、时间戳
+- 生成 Obsidian 兼容的 Markdown 文件
+- 自动创建日期索引文件
+- 支持 YAML frontmatter 便于知识库检索
+
+### 使用方法
+
+```bash
+python3 gemini_html_to_md.py
+```
+
+默认配置：
+- 输入：`~/Desktop/Takeout/我的活动/Gemini Apps/我的活动记录.html`
+- 输出：`~/Desktop/Takeout/Gemini_Conversations/`
+
+### 修改输入输出路径
+
+编辑脚本末尾的参数：
+
+```python
+if __name__ == "__main__":
+    html_file = "你的HTML文件路径"
+    output_dir = "你的输出目录路径"
+    process_gemini_html(html_file, output_dir)
+```
+
+### 输出格式
+
+```
+Gemini_Conversations/
+├── 000_INDEX.md              # 总索引
+├── 2025-05-17.md             # 每日索引
+├── 2025-05-17_001_xxx.md     # 具体对话
+└── 2025-05-17_002_xxx.md
+```
+
+每个对话文件包含：
+- YAML frontmatter（创建时间、日期、来源）
+- Prompt（用户提问）
+- Response（Gemini 回复）
+
+### 环境要求
+
+- Python 3.6+
+- 无需额外依赖（使用内置 `re` 模块）
+
+---
 
 ## 环境要求
 
 - Python 3.6+
-- 无需额外依赖
+- 无需额外依赖（`json_to_obsidian.py` 无外部依赖）
+- `gemini_html_to_md.py` 使用 Python 内置 `re` 模块，无需安装
